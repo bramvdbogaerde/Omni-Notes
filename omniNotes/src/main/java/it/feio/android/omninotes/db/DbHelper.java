@@ -18,6 +18,7 @@ package it.feio.android.omninotes.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -242,6 +243,8 @@ public class DbHelper extends SQLiteOpenHelper {
         note.set_id(note.get_id() != 0 ? note.get_id() : (int) resNote);
         note.setCreation(note.getCreation() != null ? note.getCreation() : values.getAsLong(KEY_CREATION));
         note.setLastModification(values.getAsLong(KEY_LAST_MODIFICATION));
+
+        mContext.sendBroadcast(new Intent("it.feio.android.omninotes.NEW_NOTE"));
 
         return note;
     }
@@ -1134,6 +1137,32 @@ public class DbHelper extends SQLiteOpenHelper {
         mStats.setFiles(files);
 
         return mStats;
+    }
+
+    public Cursor getAllNotesCursor(){
+        String query = "SELECT "
+                + KEY_ID + ","
+                + KEY_CREATION + ","
+                + KEY_LAST_MODIFICATION + ","
+                + KEY_TITLE + ","
+                + KEY_CONTENT + ","
+                + KEY_ARCHIVED + ","
+                + KEY_TRASHED + ","
+                + KEY_REMINDER + ","
+                + KEY_LATITUDE + ","
+                + KEY_LONGITUDE + ","
+                + KEY_ADDRESS + ","
+                + KEY_LOCKED + ","
+                + KEY_CHECKLIST + ","
+                + KEY_CATEGORY + ","
+                + KEY_CATEGORY_NAME + ","
+                + KEY_CATEGORY_DESCRIPTION + ","
+                + KEY_CATEGORY_COLOR
+                + " FROM " + TABLE_NOTES
+                + " LEFT JOIN " + TABLE_CATEGORY + " USING( " + KEY_CATEGORY + ") ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(query,null);
     }
 
 

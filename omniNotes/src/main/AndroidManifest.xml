@@ -42,6 +42,9 @@
     <uses-feature
         android:name="android.hardware.location.gps"
         android:required="false" />
+    
+    <permission android:name="it.feio.android.omninotes.read" android:protectionLevel="normal"  android:description="@string/readpermission"/>
+    <permission android:name="it.feio.android.omninotes.write" android:protectionLevel="normal"/>
 
     <application
         android:name="it.feio.android.omninotes.OmniNotes"
@@ -271,6 +274,12 @@
                 android:value="1" />
         </service>
 
+        <provider
+            android:readPermission="it.feio.android.omninotes.read"
+            android:writePermission="it.feio.android.omninotes.write"
+            android:authorities="it.feio.android.Notes"
+            android:exported="true"
+            android:name=".NotesProvider" />
     </application>
 
 </manifest>
